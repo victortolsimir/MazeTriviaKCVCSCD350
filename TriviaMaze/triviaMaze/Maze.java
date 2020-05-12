@@ -7,7 +7,7 @@ public class Maze {
 	
 	public Maze(Player thePlayer) {
 		//really a 3x3 maze
-		this.maze = new Room[5][5];
+		this.maze = new Room[6][6];
 		createMaze();
 	}
 	
@@ -18,9 +18,9 @@ public class Maze {
 	private void createMaze() {
 		
 		
-		 for(int i = 0; i < this.maze.length - 1; i++) {
-			 for(int j = 0; j < this.maze.length - 1; j++) {
-				 this.maze[i][j] = new Room(i, j);
+		 for(int i = 1; i < this.maze.length - 1; i++) {
+			 for(int j = 1; j < this.maze.length - 1; j++) {
+				 this.maze[i][j] = new Room(i -1, j -1);
 			 }
 		 }
 	}
