@@ -1,3 +1,4 @@
+package triviaMaze;
 /* Caleb Stanley TriviaMaze Room class iteration 1
  * CSCD 350 Victor, Kayla, Caleb
  */
@@ -137,7 +138,7 @@ public class Room {
 	//Checks to see if all the doors in the wall array are either locked or are a wall, if they are it returns true, else returns false.
 	public boolean allDoorsLocked() {
 		
-		if(this.walls[0] == LOCKED || this.walls[0] == WALL && this.walls[1] == LOCKED || this.walls[1] == WALL && this.walls[2] == LOCKED || this.walls[2] == WALL && this.walls[3] == LOCKED || this.walls[3] == WALL)
+		if((this.walls[0] == LOCKED || this.walls[0] == WALL) && (this.walls[1] == LOCKED || this.walls[1] == WALL) && (this.walls[2] == LOCKED || this.walls[2] == WALL) && (this.walls[3] == LOCKED || this.walls[3] == WALL))
 			return true;
 		else
 			return false;
@@ -145,5 +146,9 @@ public class Room {
 	
 	public void setLock(int direction) {
 		this.walls[direction] = LOCKED;
+	}
+	
+	public int[] getCoordinates() {
+		return this.coordinates;
 	}
 }
