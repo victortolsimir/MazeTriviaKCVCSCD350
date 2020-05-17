@@ -1,6 +1,7 @@
 package triviaMaze;
+import java.io.Serializable;
 
-public class Room {
+public class Room implements Serializable {
 	
 	final int UNLOCKED = 0;
 	final int LOCKED = 1;

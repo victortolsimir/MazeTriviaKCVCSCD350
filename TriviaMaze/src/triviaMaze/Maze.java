@@ -1,8 +1,8 @@
 package triviaMaze;
 
+import java.io.Serializable;
 
-
-public class Maze {
+public class Maze implements Serializable {
 
 	private Room[][] maze;
 	private Player player;
