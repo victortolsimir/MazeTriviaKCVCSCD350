@@ -21,63 +21,63 @@ public class Room {
 		this.isEntrance = false;
 		this.isExit = false;
 		
-		if(xPos == 0 && yPos == 0) {
+		if(xPos == 1 && yPos == 1) {
 			this.walls[0] = WALL;
 			this.walls[1] = UNLOCKED;
 			this.walls[2] = UNLOCKED;
 			this.walls[3] = WALL;
 		}
 		
-		else if(xPos == 3 && yPos == 0) {
+		else if(xPos == 4 && yPos == 1) {
 			this.walls[0] = UNLOCKED;
 			this.walls[1] = UNLOCKED;
 			this.walls[2] = WALL;
 			this.walls[3] = WALL;
 		}
 		
-		else if(xPos == 0 && yPos == 3) {
+		else if(xPos == 1 && yPos == 4) {
 			this.walls[0] = WALL;
 			this.walls[1] = WALL;
 			this.walls[2] = UNLOCKED;
 			this.walls[3] = UNLOCKED;
 		}
 		
-		else if(xPos == 3 && yPos == 3) {
+		else if(xPos == 4 && yPos == 4) {
 			this.walls[0] = UNLOCKED;
 			this.walls[1] = WALL;
 			this.walls[2] = WALL;
 			this.walls[3] = UNLOCKED;
 		}
 		
-		else if(xPos == 0 && yPos > 0 && yPos < 3) {
+		else if(xPos == 1 && yPos > 1 && yPos < 4) {
 			this.walls[0] = WALL;
 			this.walls[1] = UNLOCKED;
 			this.walls[2] = UNLOCKED;
 			this.walls[3] = UNLOCKED;
 		}
 		
-		else if(xPos == 3 && yPos > 0 && yPos < 3) {
+		else if(xPos == 4 && yPos > 1 && yPos < 4) {
 			this.walls[0] = UNLOCKED;
 			this.walls[1] = UNLOCKED;
 			this.walls[2] = WALL;
 			this.walls[3] = UNLOCKED;
 		}
 		
-		else if(xPos > 0 && xPos < 3 && yPos == 0) {
+		else if(xPos > 1 && xPos < 4 && yPos == 1) {
 			this.walls[0] = UNLOCKED;
 			this.walls[1] = UNLOCKED;
 			this.walls[2] = UNLOCKED;
 			this.walls[3] = WALL;
 		}
 		
-		else if(xPos > 0 && xPos < 3 && yPos == 3) {
+		else if(xPos > 1 && xPos < 4 && yPos == 4) {
 			this.walls[0] = UNLOCKED;
 			this.walls[1] = WALL;
 			this.walls[2] = UNLOCKED;
 			this.walls[3] = UNLOCKED;
 		}
 		
-		else if(xPos > 0 && xPos < 3 && yPos > 0 && yPos < 3) {
+		else if(xPos > 1 && xPos < 4 && yPos > 1 && yPos < 4) {
 			this.walls[0] = UNLOCKED;
 			this.walls[1] = UNLOCKED;
 			this.walls[2] = UNLOCKED;
@@ -118,10 +118,10 @@ public class Room {
 		if(this.walls[1] == UNLOCKED && this.walls[3] == UNLOCKED)
 			str += "|   |\n";
 		
-		else if(this.walls[1] == LOCKED || this.walls[1] == WALL && this.walls[3] == UNLOCKED)
+		else if((this.walls[1] == LOCKED || this.walls[1] == WALL) && this.walls[3] == UNLOCKED)
 			str += "|   *\n";
 		
-		else if(this.walls[1] == UNLOCKED && this.walls[3] == LOCKED || this.walls[3] == WALL)
+		else if(this.walls[1] == UNLOCKED && (this.walls[3] == LOCKED || this.walls[3] == WALL))
 			str += "*   |\n";
 		
 		else

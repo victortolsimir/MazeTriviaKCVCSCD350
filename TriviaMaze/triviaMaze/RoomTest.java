@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import triviaMaze.Room;
+
 class RoomTest {
 	
 	Room room;
@@ -30,7 +32,7 @@ class RoomTest {
 		assertEquals(expected,r.toString());
 		
 		//east room
-		r = new Room(2,5);
+		r = new Room(2,4);
 		expected = "* - *\n|   *\n* - *\n";
 		assertEquals(expected,r.toString());
 		

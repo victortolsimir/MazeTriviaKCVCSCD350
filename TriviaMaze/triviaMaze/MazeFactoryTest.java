@@ -1,17 +1,16 @@
 package triviaMaze;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
-import triviaMaze.*;
 
 import org.junit.jupiter.api.Test;
 
-class MazeTest {
-	
-	private Maze maze;
+class MazeFactoryTest {
 
 	@Test
-	void testMaze() {
+	void createMazeTest() {
+		MazeFactory mazeFactory = new MazeFactory();
+		Maze maze = mazeFactory.createMaze(new Player(1,1,null));
+		
 		String r1, r2, r3, r4, r5, r6, r7, r8, r9;
 		r1 = "* * *\n*   |\n* - *\n"; //north west
 		r2 = "* * *\n|   |\n* - *\n"; //north
@@ -22,12 +21,10 @@ class MazeTest {
 		r7 = "* - *\n*   |\n* * *\n"; //south west
 		r8 = "* - *\n|   |\n* * *\n"; //south
 		r9 = "* - *\n|   *\n* * *\n"; //south east
-		
-		this.maze = new Maze(new Player(1,1, "John Doe"));
-		String testingStr = r1+r2+r2+r3+r4+r5+r5+r6+r4+r5+r5+r6+r7+r8+r8+r9;
+		String expected = r1+r2+r2+r3+r4+r5+r5+r6+r4+r5+r5+r6+r7+r8+r8+r9;
 
-		assertEquals(testingStr, maze.toString());
-		//fail("Not yet implemented");
+		assertEquals(expected, maze.toString());
 	}
+	
 
 }

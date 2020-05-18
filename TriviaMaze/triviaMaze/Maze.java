@@ -20,7 +20,7 @@ public class Maze {
 		
 		 for(int i = 1; i < this.maze.length - 1; i++) {
 			 for(int j = 1; j < this.maze.length - 1; j++) {
-				 this.maze[i][j] = new Room(i -1, j -1);
+				 this.maze[i][j] = new Room(i, j);
 			 }
 		 }
 	}
