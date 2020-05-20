@@ -1,5 +1,7 @@
 package triviaMaze;
 
+import java.util.ArrayList;
+
 public class Maze {
 
 	private Room[][] maze;
@@ -37,5 +39,36 @@ public class Maze {
 	
 	public Room[][] getMaze() {
 		return this.maze;
+	}
+	
+	public ArrayList<String> getMazeTopRow(int row) {
+		
+		ArrayList<String> list = new ArrayList<String>();
+		for(int i = 1; i < 5; i++) {
+			list.add(this.maze[row][i].getTopRow());
+		}
+		return list;
+		
+	}
+	
+	public ArrayList<String> getMazeMidRow(int row, Player player) {
+		
+		ArrayList<String> list = new ArrayList<String>();
+		for(int i = 1; i < 5; i++) {
+			int[] array = {row, i};
+			list.add(this.maze[row][i].getMidRow(player, array));
+		}
+		return list;
+		
+	}
+	
+	public ArrayList<String> getMazeBotRow(int row) {
+		
+		ArrayList<String> list = new ArrayList<String>();
+		for(int i = 1; i < 5; i++) {
+			list.add(this.maze[row][i].getBotRow());
+		}
+		return list;
+		
 	}
 }
