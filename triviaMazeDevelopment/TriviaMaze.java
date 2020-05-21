@@ -1,5 +1,8 @@
 package triviaMazeDevelopment;
 import java.util.Scanner;
+import triviaMaze.Maze;
+import triviaMaze.Player;
+import triviaMaze.Room;
 
 public class TriviaMaze {
 	

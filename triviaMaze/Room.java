@@ -118,10 +118,10 @@ public class Room {
 		if(this.walls[1] == UNLOCKED && this.walls[3] == UNLOCKED)
 			str += "|   |\n";
 		
-		else if(this.walls[1] == LOCKED || this.walls[1] == WALL && this.walls[3] == UNLOCKED)
+		else if((this.walls[1] == LOCKED || this.walls[1] == WALL) && this.walls[3] == UNLOCKED)
 			str += "|   *\n";
 		
-		else if(this.walls[1] == UNLOCKED && this.walls[3] == LOCKED || this.walls[3] == WALL)
+		else if(this.walls[1] == UNLOCKED && (this.walls[3] == LOCKED || this.walls[3] == WALL))
 			str += "*   |\n";
 		
 		else
@@ -134,6 +134,66 @@ public class Room {
 		
 		return str;
 	}
+	
+	public String getTopRow() {
+		
+		String str = "";
+		if(this.walls[0] == UNLOCKED)
+			str += "* - *";
+		else 
+			str += "* * *";
+		
+		return str;
+		
+	}
+
+	public String getMidRow(Player player, int[] position) {
+		
+		String str = "";
+		if(this.walls[1] == UNLOCKED && this.walls[3] == UNLOCKED) 
+			
+			if(player.getCoordinates()[0] == position[0] && player.getCoordinates()[1] == position[1])
+				str += "| P |";
+			else 
+				str += "|   |";
+		
+		else if((this.walls[1] == LOCKED || this.walls[1] == WALL) && this.walls[3] == UNLOCKED) 
+			
+			if(player.getCoordinates()[0] == position[0] && player.getCoordinates()[1] == position[1])
+				str += "| P *";
+			else 
+				str += "|   *";
+		
+		
+		else if(this.walls[1] == UNLOCKED && (this.walls[3] == LOCKED || this.walls[3] == WALL))
+			
+			if(player.getCoordinates()[0] == position[0] && player.getCoordinates()[1] == position[1])
+				str += "* P |";
+			else 
+				str += "*   |";
+		
+		else 
+			
+			if(player.getCoordinates()[0] == position[0] && player.getCoordinates()[1] == position[1])
+				str += "* P *";
+			else 
+				str += "*   *";
+		
+		return str; 
+	}
+	
+	public String getBotRow() { 
+		
+		String str = "";
+		if(this.walls[2] == UNLOCKED)
+			str += "* - *";
+		else
+			str += "* * *";
+		
+		return str;
+	}
+	
+	
 	
 	//Checks to see if all the doors in the wall array are either locked or are a wall, if they are it returns true, else returns false.
 	public boolean allDoorsLocked() {
