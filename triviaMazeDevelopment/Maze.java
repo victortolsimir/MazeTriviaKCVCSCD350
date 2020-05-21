@@ -1,4 +1,4 @@
-package triviaMaze;
+package triviaMazeDevelopment;
 
 public class Maze {
 

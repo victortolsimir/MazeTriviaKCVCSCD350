@@ -1,5 +1,5 @@
   
-package triviaMaze;
+package triviaMazeDevelopment;
 
 public class MazeFactory {
 	

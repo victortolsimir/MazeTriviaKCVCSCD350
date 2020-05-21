@@ -1,4 +1,4 @@
-package triviaMaze;
+package triviaMazeDevelopment;
 import java.util.Scanner;
 
 public class TriviaMaze {
@@ -26,7 +26,7 @@ public class TriviaMaze {
 			
 			System.out.println("Current Room:\n");
 			System.out.println(maze[x][y].toString());
-			String option = getPlayerOption(maze[x][y]);
+			String option = newMaze.getPlayerOption(maze[x][y]);
 			int[] results = newMaze.menu(maze[x][y],x, y, player,option); 
 			x = results[0];
 			y = results[1];
@@ -34,7 +34,7 @@ public class TriviaMaze {
 	}
 	
 	
-	private static String getPlayerOption(Room room) {
+	private String getPlayerOption(Room room) {
 		int[] position = room.getCoordinates();
 		String option;
 		
@@ -55,7 +55,7 @@ public class TriviaMaze {
 		return option;
 	}
 
-	private int[] menu(Room room, int x, int y, Player player, String option) {
+	public int[] menu(Room room, int x, int y, Player player, String option) {
 		
 		int optionReturn = 0;
 		int[] position = room.getCoordinates();

@@ -1,4 +1,4 @@
-package triviaMaze;
+package triviaMazeDevelopment;
 
 public class PlayerFactory {
 	public Player createPlayer(String name) {
