@@ -47,6 +47,7 @@ public class TriviaMaze {
 	public static void main(String[] args) throws SQLException {
 		sc = new Scanner(System.in);
 		menu();
+		sc.close();
 	}
 	
 	private static void menu() throws SQLException {
@@ -136,7 +137,7 @@ public class TriviaMaze {
 				if(answer == true) {
 					results[1] = y;
 					results[0] = x - 1;
-					player.setCoordinates(x - 1,  y);
+					this.triviaMaze.getPlayer().setCoordinates(x - 1,  y);
 				}
 				else {
 					this.triviaMaze.getMaze()[x][y].setLock(0);
@@ -152,7 +153,7 @@ public class TriviaMaze {
 				if(answer == true) {
 					results[0] = x;
 					results[1] = y + 1;
-					player.setCoordinates(x,  y + 1);
+					this.triviaMaze.getPlayer().setCoordinates(x,  y + 1);
 				}
 				else {
 					this.triviaMaze.getMaze()[x][y].setLock(1);
@@ -168,7 +169,7 @@ public class TriviaMaze {
 				if(answer == true) {
 					results[0] = x + 1;
 					results[1] = y;
-					player.setCoordinates(x + 1, y);
+					this.triviaMaze.getPlayer().setCoordinates(x + 1, y);
 				}
 				else {
 					this.triviaMaze.getMaze()[x][y].setLock(2);
@@ -184,7 +185,7 @@ public class TriviaMaze {
 					if(answer == true) {
 						results[0] = x;
 						results[1] = y - 1;
-						player.setCoordinates(x, y - 1);
+						this.triviaMaze.getPlayer().setCoordinates(x, y - 1);
 				}
 				else {
 					this.triviaMaze.getMaze()[x][y].setLock(3);
@@ -231,7 +232,7 @@ public class TriviaMaze {
 		while( i < 5) {
 			
 			ArrayList<String> topRow = TriviaMaze.triviaMaze.getMazeTopRow(i); 
-			ArrayList<String> midRow = TriviaMaze.triviaMaze.getMazeMidRow(i, TriviaMaze.player);
+			ArrayList<String> midRow = TriviaMaze.triviaMaze.getMazeMidRow(i, TriviaMaze.triviaMaze.getPlayer());
 			ArrayList<String> botRow = TriviaMaze.triviaMaze.getMazeBotRow(i);
 	
 			for(String top : topRow) {

@@ -1,5 +1,8 @@
 package triviaMaze;
-public class Player {
+
+import java.io.Serializable;
+
+public class Player implements Serializable {
 	
 	private int[] position;
 	private int lives;

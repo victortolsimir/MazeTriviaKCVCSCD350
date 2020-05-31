@@ -11,6 +11,7 @@ public class Maze implements Serializable {
 	public Maze(Player thePlayer) {
 		//really a 3x3 maze
 		this.maze = new Room[6][6];
+		this.player = thePlayer;
 		createMaze();
 	}
 	
