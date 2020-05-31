@@ -76,6 +76,27 @@ public class TriviaDatabase {
 		return result;
 	}
 	
+	public void addTableItem(String question, String answer, ArrayList<String> options) throws SQLException{
+		stmt = c.createStatement();
+		
+		String option = "";
+		for(int i = 0; i < options.size(); i++) {
+			option+=options.get(i);
+			if(i != options.size()-1) {
+				option+=";";
+			}
+		}
+		
+		int idCount = getIDCountTD();
+		int id = idCount+1;
+		
+		
+		String sql = "INSERT INTO TriviaMazeQuestions (Question,Answer,Options,ID) "+
+				"VALUES ("+" \""+question+"\", \""+answer+"\", \""+option+"\", "+id+" );";
+		stmt.executeUpdate(sql);
+		
+	}
+	
 	public int getIDCount() throws SQLException {
 		int result = 0;
 		stmt = c.createStatement();
@@ -85,6 +106,16 @@ public class TriviaDatabase {
 		}
 		return result;
         
+	}
+	
+	private int getIDCountTD() throws SQLException {
+		int result = 0;
+		stmt = c.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT COUNT(ID) FROM TriviaMazeQuestions;");
+		while(rs.next()) {
+			result = rs.getInt("COUNT(ID)");
+		}
+		return result;
 	}
 	
 }

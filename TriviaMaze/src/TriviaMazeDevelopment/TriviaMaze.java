@@ -11,8 +11,10 @@ import java.util.Scanner;
 import java.sql.*;
 
 import triviaMaze.Maze;
+import triviaMaze.MazeFactory;
 import triviaMaze.MazeOriginator;
 import triviaMaze.Player;
+import triviaMaze.PlayerFactory;
 import triviaMaze.Room;
 import triviaMaze.TriviaDatabase;
 
@@ -28,10 +30,14 @@ public class TriviaMaze {
     private Player player;
 	
 	public TriviaMaze() {
-		this.player = new Player(1, 1, getName());
-		this.triviaMaze = new Maze(player);
+		
+		//this.player = new Player(1, 1, getName());
+		PlayerFactory pf = new PlayerFactory();
+		MazeFactory mf = new MazeFactory();
+		this.player = pf.createPlayer(getName());
+		this.triviaMaze = mf.createMaze(this.player);
 		this.questions = new ArrayList<Integer>();
-		if(player.getName().equalsIgnoreCase("admin"))
+		if(this.player.getName().equalsIgnoreCase("admin"))
 			this.adminMode = true;
 		else {
 			this.adminMode = false;
@@ -257,7 +263,7 @@ public class TriviaMaze {
 	
 	private void optionsMenu() {
 		
-		System.out.println("Press 1. to save game\nPress 2. to load game\n");
+		System.out.println("Press 1. to save game\nPress 2. to load game\nPress 3. to quit");
 		int option = sc.nextInt();
 		sc.nextLine();
 		
@@ -265,8 +271,11 @@ public class TriviaMaze {
 			saveGame(this.triviaMaze);
 		}
 		
-		else {
+		else if(option == 2)
 			this.triviaMaze = loadGame().getMaze();
+			
+		else {
+			System.exit(0);
 		}
 	}
 	
@@ -374,4 +383,5 @@ public class TriviaMaze {
 			return false;
 		}
 	}
+
 }
