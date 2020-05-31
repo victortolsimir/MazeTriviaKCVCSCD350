@@ -353,12 +353,17 @@ public class TriviaMaze {
 			
 		}
 		
-		int userAnswer = Integer.parseInt(sc.nextLine()) - 1;
-		
-		while(userAnswer >= options.size()) {
-			System.out.println("Please enter valid number");
+		int userAnswer = 0;
+		try {
 			userAnswer = Integer.parseInt(sc.nextLine()) - 1;
+			while(userAnswer >= options.size() || userAnswer < 0) {
+				System.out.println("Please enter valid number");
+				userAnswer = Integer.parseInt(sc.nextLine()) - 1;
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
 		}
+		
 		
 		if(options.get(userAnswer).equals(answer)) {
 			System.out.println("Answer is Correct!\n");
