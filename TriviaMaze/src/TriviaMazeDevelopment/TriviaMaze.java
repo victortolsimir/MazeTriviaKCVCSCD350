@@ -353,9 +353,14 @@ public class TriviaMaze {
 			
 		}
 		
-		String userAnswer = sc.nextLine();
+		int userAnswer = Integer.parseInt(sc.nextLine()) - 1;
 		
-		if(userAnswer.trim().equalsIgnoreCase(answer)) {
+		while(userAnswer >= options.size()) {
+			System.out.println("Please enter valid number");
+			userAnswer = Integer.parseInt(sc.nextLine()) - 1;
+		}
+		
+		if(options.get(userAnswer).equals(answer)) {
 			System.out.println("Answer is Correct!\n");
 			return true;
 		}
