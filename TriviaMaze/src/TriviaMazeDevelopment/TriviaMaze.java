@@ -21,66 +21,79 @@ import triviaMaze.TriviaDatabase;
 public class TriviaMaze {
 	
 	private static Scanner sc;
-	//private MazeFactory mazeFactory;
-	//private PlayerFactory playerFactory;
-	private ArrayList<Integer> questions;
-	private boolean adminMode;
-	private int questionNum;
-	private Maze triviaMaze;
-    private Player player;
+	private static MazeFactory mf;
+	private static PlayerFactory pf;
+	private static ArrayList<Integer> questions;
+	private static boolean adminMode;
+	private static int questionNum;
+	private static Maze triviaMaze;
 	
-	public TriviaMaze() {
-		
-		//this.player = new Player(1, 1, getName());
-		PlayerFactory pf = new PlayerFactory();
-		MazeFactory mf = new MazeFactory();
-		this.player = pf.createPlayer(getName());
-		this.triviaMaze = mf.createMaze(this.player);
-		this.questions = new ArrayList<Integer>();
-		if(this.player.getName().equalsIgnoreCase("admin"))
-			this.adminMode = true;
+	private static void gameInitialize() {
+		pf = new PlayerFactory();
+		mf = new MazeFactory();
+		Player player = pf.createPlayer(getName());
+		triviaMaze = mf.createMaze(player);
+		questions = new ArrayList<Integer>();
+		if(player.getName().equalsIgnoreCase("admin"))
+			adminMode = true;
 		else {
-			this.adminMode = false;
+			adminMode = false;
 		}
 		
 		for(int i = 0; i < 25; i++)
 			questions.add(new Integer(i));
 		
 		Collections.shuffle(questions);
-		this.questionNum = 1;
+		questionNum = 1;
 	}
 	
 	public static void main(String[] args) throws SQLException {
 		sc = new Scanner(System.in);
+		gameInitialize();
 		menu();
 		sc.close();
 	}
 	
 	private static void menu() throws SQLException {
 		
-		TriviaMaze newMaze = new TriviaMaze();
-		Player player = newMaze.player;
-		Room[][] maze = newMaze.triviaMaze.getMaze();
+		Room[][] maze = triviaMaze.getMaze();
+		Player player = triviaMaze.getPlayer();
 		String playAgain;
-		int x = 1, y = 1;
-		System.out.println("\nWelcome to the Trivia Maze\n");
+		int x = 1;
+		int y = 1;
+		System.out.println("\nWelcome to the Trivia Maze \n");
 		
 		while(!(maze[x][y].allDoorsLocked()) && player.getLives() > 0) {
 			
+			//re-initialize stored values
+			player = triviaMaze.getPlayer();
+			maze = triviaMaze.getMaze();
+			int[] coords = player.getCoordinates();
+			x = coords[0];
+			y = coords[1];
+			
+			
 			System.out.println("Current Maze: \n");
-			newMaze.printMaze(newMaze);
+			printMaze();
+			System.out.println(player.toString() + "\n");
+			
 			String option = getPlayerOption(maze[x][y]);
-			int[] results = newMaze.menuDirection(maze[x][y],x, y, player,option); 
+			int[] results = menuDirection(maze[x][y],x, y, player,option);
+			
 			x = results[0];
 			y = results[1];
+			
+	
 			if(x == 4 && y == 4) {
 				System.out.println("\n*******************************************");
 				System.out.println("\n Congratulations you have beaten the maze!");
 				System.out.println("\n*******************************************");
 				System.out.println("\nPlay Again? type \"yes\" or \"no\"");
 				playAgain = sc.nextLine();
-				if(playAgain.trim().equalsIgnoreCase("yes"))
+				if(playAgain.trim().equalsIgnoreCase("yes")) {
+					gameInitialize();
 					menu();
+				}
 				else {
 					System.exit(0);
 				}
@@ -92,8 +105,11 @@ public class TriviaMaze {
 		System.out.println("\n-----------------------------------------");
 		System.out.println("\nPlay Again? type \"yes\" or \"no\"");
 		playAgain = sc.nextLine();
-		if(playAgain.trim().equalsIgnoreCase("yes"))
+		if(playAgain.trim().equalsIgnoreCase("yes")) {
+			gameInitialize();
 			menu();
+		}
+		
 		else {
 			System.exit(0);
 		}
@@ -121,7 +137,7 @@ public class TriviaMaze {
 		return option;
 	}
 
-	private int[] menuDirection(Room room, int x, int y, Player player, String option) throws SQLException {
+	private static int[] menuDirection(Room room, int x, int y, Player player, String option) throws SQLException {
 		
 		int optionReturn = 0;
 		int[] position = room.getCoordinates();
@@ -143,12 +159,12 @@ public class TriviaMaze {
 				if(answer == true) {
 					results[1] = y;
 					results[0] = x - 1;
-					this.triviaMaze.getPlayer().setCoordinates(x - 1,  y);
+					triviaMaze.getPlayer().setCoordinates(x - 1,  y);
 				}
 				else {
-					this.triviaMaze.getMaze()[x][y].setLock(0);
-					this.triviaMaze.getMaze()[x-1][y].setLock(2);
-					if(this.adminMode == false)
+					triviaMaze.getMaze()[x][y].setLock(0);
+					triviaMaze.getMaze()[x-1][y].setLock(2);
+					if(adminMode == false)
 						player.subtractLife();
 				}
 			}
@@ -159,12 +175,12 @@ public class TriviaMaze {
 				if(answer == true) {
 					results[0] = x;
 					results[1] = y + 1;
-					this.triviaMaze.getPlayer().setCoordinates(x,  y + 1);
+					triviaMaze.getPlayer().setCoordinates(x,  y + 1);
 				}
 				else {
-					this.triviaMaze.getMaze()[x][y].setLock(1);
-					this.triviaMaze.getMaze()[x][y+1].setLock(3);
-					if(this.adminMode == false)
+					triviaMaze.getMaze()[x][y].setLock(1);
+					triviaMaze.getMaze()[x][y+1].setLock(3);
+					if(adminMode == false)
 						player.subtractLife();
 				}
 			}
@@ -175,12 +191,12 @@ public class TriviaMaze {
 				if(answer == true) {
 					results[0] = x + 1;
 					results[1] = y;
-					this.triviaMaze.getPlayer().setCoordinates(x + 1, y);
+					triviaMaze.getPlayer().setCoordinates(x + 1, y);
 				}
 				else {
-					this.triviaMaze.getMaze()[x][y].setLock(2);
-					this.triviaMaze.getMaze()[x+1][y].setLock(0);
-					if(this.adminMode == false)
+					triviaMaze.getMaze()[x][y].setLock(2);
+					triviaMaze.getMaze()[x+1][y].setLock(0);
+					if(adminMode == false)
 						player.subtractLife();
 				}
 			}
@@ -191,12 +207,12 @@ public class TriviaMaze {
 					if(answer == true) {
 						results[0] = x;
 						results[1] = y - 1;
-						this.triviaMaze.getPlayer().setCoordinates(x, y - 1);
+						triviaMaze.getPlayer().setCoordinates(x, y - 1);
 				}
 				else {
-					this.triviaMaze.getMaze()[x][y].setLock(3);
-					this.triviaMaze.getMaze()[x][y-1].setLock(1);
-					if(this.adminMode == false)
+					triviaMaze.getMaze()[x][y].setLock(3);
+					triviaMaze.getMaze()[x][y-1].setLock(1);
+					if(adminMode == false)
 						player.subtractLife();
 				}
 			}
@@ -213,7 +229,7 @@ public class TriviaMaze {
 		return results; // results[0] is going to be x coordinates, results[1] is going to be y coordinate;
 	}
 	
-	private String getName() {
+	private static String getName() {
 		
 		System.out.print("Please Enter your name: ");
 		String name = sc.nextLine();
@@ -229,7 +245,7 @@ public class TriviaMaze {
 		return name;
 	}
 	
-	private void printMaze(TriviaMaze TriviaMaze) {
+	private static void printMaze() {
 		
 		
 		int i = 1;
@@ -237,9 +253,9 @@ public class TriviaMaze {
 		
 		while( i < 5) {
 			
-			ArrayList<String> topRow = TriviaMaze.triviaMaze.getMazeTopRow(i); 
-			ArrayList<String> midRow = TriviaMaze.triviaMaze.getMazeMidRow(i, TriviaMaze.triviaMaze.getPlayer());
-			ArrayList<String> botRow = TriviaMaze.triviaMaze.getMazeBotRow(i);
+			ArrayList<String> topRow = triviaMaze.getMazeTopRow(i); 
+			ArrayList<String> midRow = triviaMaze.getMazeMidRow(i, triviaMaze.getPlayer());
+			ArrayList<String> botRow = triviaMaze.getMazeBotRow(i);
 	
 			for(String top : topRow) {
 				System.out.print(top + " ");
@@ -261,18 +277,18 @@ public class TriviaMaze {
 		}
 	}
 	
-	private void optionsMenu() {
+	private static void optionsMenu() {
 		
 		System.out.println("Press 1. to save game\nPress 2. to load game\nPress 3. to quit");
 		int option = sc.nextInt();
 		sc.nextLine();
 		
 		if(option == 1) {
-			saveGame(this.triviaMaze);
+			saveGame(triviaMaze);
 		}
 		
 		else if(option == 2)
-			this.triviaMaze = loadGame().getMaze();
+			triviaMaze = loadGame().getMaze();
 			
 		else {
 			System.exit(0);
@@ -331,15 +347,15 @@ public class TriviaMaze {
 		return savedGame;
 	}
 	
-	private boolean askQuestion() throws SQLException {
+	private static boolean askQuestion() throws SQLException {
 		
-		int questionIndex = this.questions.get(this.questionNum);
+		int questionIndex = questions.get(questionNum);
 		TriviaDatabase db = new TriviaDatabase();
 		String question;
 		String answer;
 		ArrayList<String> options;
 		
-		if(this.adminMode == true) {
+		if(adminMode == true) {
 			db.changeTable();
 			question = db.getQuestion(questionNum);
 			answer = db.getAnswer(questionNum);
@@ -351,7 +367,7 @@ public class TriviaMaze {
 			answer = db.getAnswer(questionIndex);
 			int idCount = db.getIDCount();
 			options = db.getOptions(questionIndex);
-			this.questionNum++;
+			questionNum++;
 		}
 		
 		System.out.println("Question: " + question);
@@ -384,4 +400,6 @@ public class TriviaMaze {
 		}
 	}
 
+	
+	
 }

@@ -164,6 +164,8 @@ public class Room implements Serializable{
 			
 			if(player.getCoordinates()[0] == position[0] && player.getCoordinates()[1] == position[1])
 				str += "| P *";
+			else if(position[0] == 4 && position[1] == 4)
+				str += "| E *";
 			else 
 				str += "|   *";
 		
