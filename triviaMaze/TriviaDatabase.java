@@ -76,14 +76,29 @@ public class TriviaDatabase {
 		return result;
 	}
 	
-	public void addTableItem(String question, String answer, ArrayList<String> options) throws SQLException{
+	public String getType(int id) throws SQLException{
+		stmt = c.createStatement();
+		String result = "";
+		ResultSet rs = stmt.executeQuery("SELECT * FROM "+currentTable+" WHERE ID = "+id+";");
+		while(rs.next()) {
+			result = rs.getString("Type");
+		}
+		return result;
+	}
+	
+	public void addTableItem(String question, String answer, ArrayList<String> options, String type) throws SQLException{
 		stmt = c.createStatement();
 		
 		String option = "";
-		for(int i = 0; i < options.size(); i++) {
-			option+=options.get(i);
-			if(i != options.size()-1) {
-				option+=";";
+		if(options.isEmpty()) {
+			option = null;
+		}
+		else {
+			for(int i = 0; i < options.size(); i++) {
+				option+=options.get(i);
+				if(i != options.size()-1) {
+					option+=";";
+				}
 			}
 		}
 		
@@ -91,8 +106,8 @@ public class TriviaDatabase {
 		int id = idCount+1;
 		
 		
-		String sql = "INSERT INTO TriviaMazeQuestions (Question,Answer,Options,ID) "+
-				"VALUES ("+" \""+question+"\", \""+answer+"\", \""+option+"\", "+id+" );";
+		String sql = "INSERT INTO TriviaMazeQuestions (Question,Answer,Options,ID,Type) "+
+				"VALUES ("+" \""+question+"\", \""+answer+"\", \""+option+"\", "+id+", \""+type+"\" );";
 		stmt.executeUpdate(sql);
 		
 	}
