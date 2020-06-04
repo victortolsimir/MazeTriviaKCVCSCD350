@@ -1,7 +1,11 @@
 package triviaMaze;
+
 import java.io.Serializable;
 
-public class Room implements Serializable {
+/* Caleb Stanley TriviaMaze Room class iteration 1
+ * CSCD 350 Victor, Kayla, Caleb
+ */
+public class Room implements Serializable{
 	
 	final int UNLOCKED = 0;
 	final int LOCKED = 1;
@@ -10,78 +14,84 @@ public class Room implements Serializable {
 	private boolean isExit;
 	private boolean isEntrance;
 	private int[] coordinates = new int[2];
+	private int roomNum;
 	
 	//Used to construct the Room by filling out the walls array appropriately as well as the coordinates array.
-	public Room(int xPos, int yPos) {
+	public Room(int xPos, int yPos, int num) {
 		
 		this.walls = new int[4];
 		this.coordinates[0] = xPos;
 		this.coordinates[1] = yPos;
 		this.isEntrance = false;
 		this.isExit = false;
+		this.roomNum = num;
 		
-		if(xPos == 0 && yPos == 0) {
+		if(xPos == 1 && yPos == 1) {
 			this.walls[0] = WALL;
 			this.walls[1] = UNLOCKED;
 			this.walls[2] = UNLOCKED;
 			this.walls[3] = WALL;
 		}
 		
-		else if(xPos == 3 && yPos == 0) {
+		else if(xPos == 4 && yPos == 1) {
 			this.walls[0] = UNLOCKED;
 			this.walls[1] = UNLOCKED;
 			this.walls[2] = WALL;
 			this.walls[3] = WALL;
 		}
 		
-		else if(xPos == 0 && yPos == 3) {
+		else if(xPos == 1 && yPos == 4) {
 			this.walls[0] = WALL;
 			this.walls[1] = WALL;
 			this.walls[2] = UNLOCKED;
 			this.walls[3] = UNLOCKED;
 		}
 		
-		else if(xPos == 3 && yPos == 3) {
+		else if(xPos == 4 && yPos == 4) {
 			this.walls[0] = UNLOCKED;
 			this.walls[1] = WALL;
 			this.walls[2] = WALL;
 			this.walls[3] = UNLOCKED;
 		}
 		
-		else if(xPos == 0 && yPos > 0 && yPos < 3) {
+		else if(xPos == 1 && yPos > 1 && yPos < 4) {
 			this.walls[0] = WALL;
 			this.walls[1] = UNLOCKED;
 			this.walls[2] = UNLOCKED;
 			this.walls[3] = UNLOCKED;
 		}
 		
-		else if(xPos == 3 && yPos > 0 && yPos < 3) {
+		else if(xPos == 4 && yPos > 1 && yPos < 4) {
 			this.walls[0] = UNLOCKED;
 			this.walls[1] = UNLOCKED;
 			this.walls[2] = WALL;
 			this.walls[3] = UNLOCKED;
 		}
 		
-		else if(xPos > 0 && xPos < 3 && yPos == 0) {
+		else if(xPos > 1 && xPos < 4 && yPos == 1) {
 			this.walls[0] = UNLOCKED;
 			this.walls[1] = UNLOCKED;
 			this.walls[2] = UNLOCKED;
 			this.walls[3] = WALL;
 		}
 		
-		else if(xPos > 0 && xPos < 3 && yPos == 3) {
+		else if(xPos > 1 && xPos < 4 && yPos == 4) {
 			this.walls[0] = UNLOCKED;
 			this.walls[1] = WALL;
 			this.walls[2] = UNLOCKED;
 			this.walls[3] = UNLOCKED;
 		}
 		
-		else if(xPos > 0 && xPos < 3 && yPos > 0 && yPos < 3) {
+		else if(xPos > 1 && xPos < 4 && yPos > 1 && yPos < 4) {
 			this.walls[0] = UNLOCKED;
 			this.walls[1] = UNLOCKED;
 			this.walls[2] = UNLOCKED;
 			this.walls[3] = UNLOCKED;
 		}
+	}
+	
+	public int getRoomNum() {
+		return this.roomNum;
 	}
 	
 	public boolean isExit() {
@@ -117,10 +127,10 @@ public class Room implements Serializable {
 		if(this.walls[1] == UNLOCKED && this.walls[3] == UNLOCKED)
 			str += "|   |\n";
 		
-		else if(this.walls[1] == LOCKED || this.walls[1] == WALL && this.walls[3] == UNLOCKED)
+		else if((this.walls[1] == LOCKED || this.walls[1] == WALL) && this.walls[3] == UNLOCKED)
 			str += "|   *\n";
 		
-		else if(this.walls[1] == UNLOCKED && this.walls[3] == LOCKED || this.walls[3] == WALL)
+		else if(this.walls[1] == UNLOCKED && (this.walls[3] == LOCKED || this.walls[3] == WALL))
 			str += "*   |\n";
 		
 		else
@@ -134,6 +144,68 @@ public class Room implements Serializable {
 		return str;
 	}
 	
+	public String getTopRow() {
+		
+		String str = "";
+		if(this.walls[0] == UNLOCKED)
+			str += "* - *";
+		else 
+			str += "* * *";
+		
+		return str;
+		
+	}
+
+	public String getMidRow(Player player, int[] position) {
+		
+		String str = "";
+		if(this.walls[1] == UNLOCKED && this.walls[3] == UNLOCKED) 
+			
+			if(player.getCoordinates()[0] == position[0] && player.getCoordinates()[1] == position[1])
+				str += "| P |";
+			else 
+				str += "|   |";
+		
+		else if((this.walls[1] == LOCKED || this.walls[1] == WALL) && this.walls[3] == UNLOCKED) 
+			
+			if(player.getCoordinates()[0] == position[0] && player.getCoordinates()[1] == position[1])
+				str += "| P *";
+			else if(position[0] == 4 && position[1] == 4)
+				str += "| E *";
+			else 
+				str += "|   *";
+		
+		
+		else if(this.walls[1] == UNLOCKED && (this.walls[3] == LOCKED || this.walls[3] == WALL))
+			
+			if(player.getCoordinates()[0] == position[0] && player.getCoordinates()[1] == position[1])
+				str += "* P |";
+			else 
+				str += "*   |";
+		
+		else 
+			
+			if(player.getCoordinates()[0] == position[0] && player.getCoordinates()[1] == position[1])
+				str += "* P *";
+			else 
+				str += "*   *";
+		
+		return str; 
+	}
+	
+	public String getBotRow() { 
+		
+		String str = "";
+		if(this.walls[2] == UNLOCKED)
+			str += "* - *";
+		else
+			str += "* * *";
+		
+		return str;
+	}
+	
+	
+	
 	//Checks to see if all the doors in the wall array are either locked or are a wall, if they are it returns true, else returns false.
 	public boolean allDoorsLocked() {
 		
@@ -143,11 +215,31 @@ public class Room implements Serializable {
 			return false;
 	}
 	
+	public boolean topLocked() {
+		return this.walls[0] == LOCKED || this.walls[0] == WALL;
+	}
+	
+	public boolean rightLocked() {
+		return this.walls[1] == LOCKED || this.walls[1] == WALL;
+	}
+	
+	public boolean bottomLocked() {
+		return this.walls[2] == LOCKED || this.walls[2] == WALL;
+	}
+	
+	public boolean leftLocked() {
+		return this.walls[3] == LOCKED || this.walls[3] == WALL;
+	}
+	
 	public void setLock(int direction) {
 		this.walls[direction] = LOCKED;
 	}
 	
 	public int[] getCoordinates() {
 		return this.coordinates;
+	}
+	
+	public int[] getWalls() {
+		return this.walls;
 	}
 }
