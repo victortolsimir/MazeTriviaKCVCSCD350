@@ -43,19 +43,30 @@ public class TriviaMaze {
 		triviaMaze = mf.createMaze(player);
 		questions = new ArrayList<Integer>();
 		db = new TriviaDatabase();
-		if(player.getName().equalsIgnoreCase("admin"))
+		
+		if(player.getName().equalsIgnoreCase("admin")) {
+			db.changeTable();
 			adminMode = true;
+			questions.add(new Integer(1));
+			questionNum = 1;
+		}
 		else {
 			adminMode = false;
+			shuffle();
 		}
 		
-		for(int i = 1; i < 26; i++)
-			questions.add(new Integer(i));
-		
-		Collections.shuffle(questions);
-		questionNum = 1;
 	}
 	
+	private static void shuffle() throws SQLException {
+
+		int count = db.getIDCount();
+		for(int i = 1; i < count+1; i++)
+			questions.add(new Integer(i));
+		Collections.shuffle(questions);
+		
+		questionNum = 1;
+	}
+
 	public static void main(String[] args) throws SQLException {
 		sc = new Scanner(System.in);
 		gameInitialize();
@@ -301,6 +312,9 @@ public class TriviaMaze {
 			
 		else if(option == 3) {
 			addTableItem();
+			if(adminMode == false)
+				shuffle();
+			
 		}
 		else {
 			System.exit(0);
@@ -361,55 +375,69 @@ public class TriviaMaze {
 	
 	private static boolean askQuestion() throws SQLException {
 		
-		int questionIndex = questions.get(questionNum);
-		//TriviaDatabase db = new TriviaDatabase();
+		int questionIndex = questions.get(questionNum - 1);
 		String question;
 		String answer;
 		ArrayList<String> options;
+		String type;
 		
 		if(adminMode == true) {
-			db.changeTable();
 			question = db.getQuestion(questionNum);
 			answer = db.getAnswer(questionNum);
 			int idCount = db.getIDCount();
 			options = db.getOptions(questionNum); 
+			type = db.getType(questionNum);
 		}
 		else {
 			question = db.getQuestion(questionIndex);
 			answer = db.getAnswer(questionIndex);
 			int idCount = db.getIDCount();
 			options = db.getOptions(questionIndex);
+			type = db.getType(questionIndex);
 			questionNum++;
 		}
 		
 		System.out.println("Question: " + question);
 		
-		for(int i = 0; i < options.size(); i++) {
-			
-			System.out.println(i + 1 + ". " + options.get(i));
-			
-		}
-		
 		int userAnswer = 0;
-		try {
-			userAnswer = Integer.parseInt(sc.nextLine()) - 1;
-			while(userAnswer >= options.size() || userAnswer < 0) {
-				System.out.println("Please enter valid number");
-				userAnswer = Integer.parseInt(sc.nextLine()) - 1;
+		if(type.equals("multipleChoice") || type.equals("trueFalse")) {
+			
+			for(int i = 0; i < options.size(); i++) {
+				System.out.println(i + 1 + ". " + options.get(i));
 			}
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			
+			try {
+				userAnswer = Integer.parseInt(sc.nextLine()) - 1;
+				while(userAnswer >= options.size() || userAnswer < 0) {
+					System.out.println("Please enter valid number");
+					userAnswer = Integer.parseInt(sc.nextLine()) - 1;
+				}
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+			
+			if(options.get(userAnswer).equals(answer)) {
+				System.out.println("Answer is Correct!\n");
+				return true;
+			}
+			else {
+				System.out.println("Answer is Incorrect!\n");
+				return false;
+			}
 		}
 		
-		
-		if(options.get(userAnswer).equals(answer)) {
-			System.out.println("Answer is Correct!\n");
-			return true;
-		}
 		else {
-			System.out.println("Answer is Incorrect!\n");
-			return false;
+			String userAnswerShort = sc.nextLine().trim();
+			if(userAnswerShort.equalsIgnoreCase(answer)) {
+				System.out.println("Answer is Correct!\n");
+				return true;
+			}
+			else {
+				System.out.println("Answer is Incorrect!\n");
+				return false;
+			}
 		}
+		
 	}
 
 	private static void addTableItem() throws SQLException {
