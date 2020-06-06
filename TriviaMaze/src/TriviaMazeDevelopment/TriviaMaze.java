@@ -1,3 +1,10 @@
+/* Cheat Documentation:
+ * To enable cheats, enter "admin" as your name when prompted. When this is activated,
+ *  the maze will only ask one true/false question. To move through type true, and to fail chose false. 
+ *  Admin mode also does not reduce health when failing to answer a question correctly
+ * 
+*/
+
 package TriviaMazeDevelopment;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,20 +34,22 @@ public class TriviaMaze {
 	private static boolean adminMode;
 	private static int questionNum;
 	private static Maze triviaMaze;
+	private static TriviaDatabase db;
 	
-	private static void gameInitialize() {
+	private static void gameInitialize() throws SQLException {
 		pf = new PlayerFactory();
 		mf = new MazeFactory();
 		Player player = pf.createPlayer(getName());
 		triviaMaze = mf.createMaze(player);
 		questions = new ArrayList<Integer>();
+		db = new TriviaDatabase();
 		if(player.getName().equalsIgnoreCase("admin"))
 			adminMode = true;
 		else {
 			adminMode = false;
 		}
 		
-		for(int i = 0; i < 25; i++)
+		for(int i = 1; i < 26; i++)
 			questions.add(new Integer(i));
 		
 		Collections.shuffle(questions);
@@ -277,9 +286,9 @@ public class TriviaMaze {
 		}
 	}
 	
-	private static void optionsMenu() {
+	private static void optionsMenu() throws SQLException {
 		
-		System.out.println("Press 1. to save game\nPress 2. to load game\nPress 3. to quit");
+		System.out.println("Press 1. to save game\nPress 2. to load game\nPress 3. add your own question\nPress 4. to quit");
 		int option = sc.nextInt();
 		sc.nextLine();
 		
@@ -290,6 +299,9 @@ public class TriviaMaze {
 		else if(option == 2)
 			triviaMaze = loadGame().getMaze();
 			
+		else if(option == 3) {
+			addTableItem();
+		}
 		else {
 			System.exit(0);
 		}
@@ -350,7 +362,7 @@ public class TriviaMaze {
 	private static boolean askQuestion() throws SQLException {
 		
 		int questionIndex = questions.get(questionNum);
-		TriviaDatabase db = new TriviaDatabase();
+		//TriviaDatabase db = new TriviaDatabase();
 		String question;
 		String answer;
 		ArrayList<String> options;
@@ -400,6 +412,111 @@ public class TriviaMaze {
 		}
 	}
 
+	private static void addTableItem() throws SQLException {
+		Scanner sc = new Scanner(System.in);
+		String question;
+		String answer;
+		String type = "null";
+		String option;
+		int numOptions;
+		ArrayList<String> options = new ArrayList<String>();
 	
+		//get question type
+		System.out.println("What 'Type' of question is this?");
+		System.out.println("1. True/False");
+		System.out.println("2. Multiple Choice");
+		System.out.println("3. Short answer");
+		option = sc.nextLine();
+		while(!option.equals("1") && !option.equals("2") && !option.equals("3")) {
+			System.out.println("Invalid input. Please enter 1, 2, or 3.");
+			option = sc.nextLine();
+		}
+		if(option.equals("1")) {type = "trueFalse";}
+		if(option.equals("2")) {type = "multipleChoice";}
+		if(option.equals("3")) {type = "shortAnswer";}
+		
+		//get question
+		System.out.println("\nEnter a question: ");
+		question = sc.nextLine();
+		question = question.replaceAll("\"", "\'"); 
+		question = question.replaceAll(";", ",");
+		
+		//get answer
+		System.out.println("Enter an answer: ");
+		answer = sc.nextLine();
+		answer = answer.replaceAll("\"", "\'"); 
+		answer = answer.replaceAll(";", ",");
+		if(type.equals("trueFalse")) {
+			answer = answer.substring(0,1).toUpperCase() + answer.substring(1,answer.length()) ;
+			while(!answer.equalsIgnoreCase("True") && !answer.equalsIgnoreCase("False")) {
+				System.out.println("Invalid input. Please enter either 'True' or 'False'.");
+				System.out.println("Enter an answer: ");
+				answer = sc.nextLine();
+				answer = answer.substring(0,1).toUpperCase() + answer.substring(1,answer.length()) ;
+				answer = answer.replaceAll("\"", "\'"); 
+				answer = answer.replaceAll(";", ",");
+			}
+		}
+		
+		//set options
+		if(type.equals("trueFalse")) {
+			options.add("True");
+			options.add("False");
+		}
+		else if(type.equals("multipleChoice")) {
+			System.out.println("How many additional options would you like to add? (1-4)");
+			String input = sc.nextLine();
+			while( !(input.equals("1") || input.equals("2")|| input.equals("3")|| input.equals("4"))) {
+				System.out.println("Invalid integer, please enter a number from 1 to 4.");
+				input = sc.nextLine();
+			}
+			numOptions = Integer.parseInt(input);
+			
+			for(int i = 1; i <= numOptions; i++) {
+				System.out.println("Enter option "+i+":");
+				option = sc.nextLine();
+				option = option.replaceAll("\"", "\'"); 
+				option = option.replaceAll(";", ",");
+				options.add(option);
+			}
+			options.add(answer);
+			Collections.shuffle(options);
+		}
+		
+		//review table item
+		
+		System.out.println("\nReview your table item:");
+		System.out.println("--------------------------");
+		System.out.println("Question: "+question);
+		System.out.println("Answer: "+answer);
+		if(!options.isEmpty()) {
+			System.out.println("Options: ");
+			for(int i = 0; i < options.size(); i++) {
+				System.out.println((i+1)+". "+options.get(i));
+			}
+		}
+		
+		
+		System.out.println("Would you like to add this item to the question database? (Y/N)");
+		String confirmation = sc.nextLine();
+		boolean confirmed = false;
+		while(confirmed == false) {
+			if(confirmation.equalsIgnoreCase("y")) {
+				db.addTableItem(question, answer, options,type);
+				System.out.println("Item added to database!");
+				confirmed = true;
+			}
+			else if(confirmation.equalsIgnoreCase("n")) {
+				System.out.println("Item not added to database.");
+				confirmed = true;
+			}
+			else {
+				System.out.println("Invalid input.");
+				System.out.println("Would you like to add this item to the question database? (Y/N)");
+				confirmation = sc.nextLine();
+			}
+			
+		}	
+	}
 	
 }

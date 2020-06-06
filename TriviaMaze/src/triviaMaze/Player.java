@@ -38,7 +38,7 @@ public class Player implements Serializable {
 	}
 	
 	public String toString() {
-		return "Name: "+this.name+" Position: ("+this.position[0]+","+this.position[1]+") Lives: "+this.lives;
+		return this.name+" is at ("+this.position[0]+","+this.position[1]+") Lives: "+this.lives;
 	}
 	
 }
