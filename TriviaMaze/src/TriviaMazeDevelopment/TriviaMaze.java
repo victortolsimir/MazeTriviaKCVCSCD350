@@ -1,7 +1,9 @@
 /* Cheat Documentation:
- * To enable cheats, enter "admin" as your name when prompted. When this is activated,
+ *  To enable cheats, enter "admin" as your name when prompted. When this is activated,
  *  the maze will only ask one true/false question. To move through type true, and to fail chose false. 
- *  Admin mode also does not reduce health when failing to answer a question correctly
+ *  Admin mode also does not reduce health when failing to answer a question correctly. This will be used for 
+ *  testing the maze and it's features as well as testing the algorithm to check if there is a path open to the exit.
+ *  if there is no path to the exit, then the game will end.
  * 
 */
 
@@ -446,6 +448,7 @@ public class TriviaMaze {
 	}
 
 	private static void addTableItem() throws SQLException {
+		
 		Scanner sc = new Scanner(System.in);
 		String question;
 		String answer;
