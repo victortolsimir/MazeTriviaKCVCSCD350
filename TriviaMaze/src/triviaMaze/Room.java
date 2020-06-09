@@ -14,15 +14,17 @@ public class Room implements Serializable{
 	private boolean isExit;
 	private boolean isEntrance;
 	private int[] coordinates = new int[2];
+	private int roomNum;
 	
 	//Used to construct the Room by filling out the walls array appropriately as well as the coordinates array.
-	public Room(int xPos, int yPos) {
+	public Room(int xPos, int yPos, int num) {
 		
 		this.walls = new int[4];
 		this.coordinates[0] = xPos;
 		this.coordinates[1] = yPos;
 		this.isEntrance = false;
 		this.isExit = false;
+		this.roomNum = num; 
 		
 		if(xPos == 1 && yPos == 1) {
 			this.walls[0] = WALL;
@@ -86,6 +88,10 @@ public class Room implements Serializable{
 			this.walls[2] = UNLOCKED;
 			this.walls[3] = UNLOCKED;
 		}
+	}
+	
+	public int getRoomNum() {
+		return this.roomNum;
 	}
 	
 	public boolean isExit() {
@@ -207,6 +213,22 @@ public class Room implements Serializable{
 			return true;
 		else
 			return false;
+	}
+	
+	public boolean topLocked() {
+		return this.walls[0] == LOCKED || this.walls[0] == WALL;
+	}
+	
+	public boolean rightLocked() {
+		return this.walls[1] == LOCKED || this.walls[1] == WALL;
+	}
+	
+	public boolean bottomLocked() {
+		return this.walls[2] == LOCKED || this.walls[2] == WALL;
+	}
+	
+	public boolean leftLocked() {
+		return this.walls[3] == LOCKED || this.walls[3] == WALL;
 	}
 	
 	public void setLock(int direction) {

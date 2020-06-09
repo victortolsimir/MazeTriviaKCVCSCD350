@@ -81,9 +81,12 @@ public class TriviaMaze {
 		String playAgain;
 		int x = 1;
 		int y = 1;
-		System.out.println("\nWelcome to the Trivia Maze \n");
+		System.out.println("\n***********************************************************************************************");
+		System.out.println("\nWelcome to the Trivia Maze!\n\nYou need to escape the maze by reaching the exit.\nEach door you try to pass will ask you a trivia question, answer correctly and you may pass.\nMiss two questions and you will lose.");
+		System.out.println("\n***********************************************************************************************\n");
+		boolean path = true;
 		
-		while(!(maze[x][y].allDoorsLocked()) && player.getLives() > 0) {
+		while(!(maze[x][y].allDoorsLocked()) && player.getLives() > 0 && path) {
 			
 			//re-initialize stored values
 			player = triviaMaze.getPlayer();
@@ -103,7 +106,7 @@ public class TriviaMaze {
 			x = results[0];
 			y = results[1];
 			
-	
+			path = triviaMaze.traverse(x,y, new boolean[16], triviaMaze.getMaze()[x][y].getRoomNum() - 1);
 			if(x == 4 && y == 4) {
 				System.out.println("\n*******************************************");
 				System.out.println("\n Congratulations you have beaten the maze!");
@@ -115,6 +118,7 @@ public class TriviaMaze {
 					menu();
 				}
 				else {
+					sc.close();
 					System.exit(0);
 				}
 			}
@@ -131,6 +135,7 @@ public class TriviaMaze {
 		}
 		
 		else {
+			sc.close();
 			System.exit(0);
 		}
 	}
