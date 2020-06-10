@@ -1,10 +1,11 @@
+/*  Authors: Victor, Kayla, Caleb 
+ *  CSCD 350 
+*/
+
 package triviaMaze;
 
 import java.io.Serializable;
 
-/* Caleb Stanley TriviaMaze Room class iteration 1
- * CSCD 350 Victor, Kayla, Caleb
- */
 public class Room implements Serializable{
 	
 	final int UNLOCKED = 0;

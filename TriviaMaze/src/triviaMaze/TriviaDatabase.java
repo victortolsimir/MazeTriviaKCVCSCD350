@@ -1,18 +1,26 @@
+/*  Authors: Victor, Kayla, Caleb 
+ *  CSCD 350
+*/
+
 package triviaMaze;
 import java.sql.*;
 import java.util.ArrayList;
 
 public class TriviaDatabase {
+	
 	Connection c = null;
 	Statement stmt = null;
 	ResultSet rs = null;
 	private String currentTable;
 	
+	/* intitializes the trivia database and sets currentTable.
+	*/
 	public TriviaDatabase() throws SQLException{
 		initialize();
 		currentTable = "TriviaMazeQuestions";
 	}
 	
+	//  connects the sqlite to the TriviaMazeQuestions.db database.
 	private void initialize() throws SQLException{
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -28,6 +36,7 @@ public class TriviaDatabase {
 		//System.out.println("Operation done successfully");
 	}
 	
+	// changes current database table to the other database table, so if we are on AdminQuestions, we switch to TriviaMazeQuestions.
 	public void changeTable() {
 		if(currentTable.equals("TriviaMazeQuestions")) {
 			currentTable = "AdminQuestion";
@@ -37,6 +46,7 @@ public class TriviaDatabase {
 		}
 	}
 	
+	// getQuestion() executes a query using SQLite to select the question from the database with the same id as the one passed in. It returns a string of the question.
 	public String getQuestion(int id) throws SQLException{
 		String result = "";
 		stmt = c.createStatement();
@@ -49,6 +59,7 @@ public class TriviaDatabase {
         return result;
 	}
 	
+	// getAnswer() executes a query using SQLite to select the answer from the database with the same id as the one passed in. It returns a string of the answer.
 	public String getAnswer(int id) throws SQLException{
 		String result = "";
 		stmt = c.createStatement();
@@ -59,6 +70,7 @@ public class TriviaDatabase {
 		return result;
 	}
 	
+	// getOptions executes a query using SQLite to select the options from the database with the same id as the one passed in. It returns an ArrayList of the options.
 	public ArrayList<String> getOptions(int id) throws SQLException{
 		ArrayList<String> result = new ArrayList<String>();
 		String temp = "";
@@ -76,6 +88,7 @@ public class TriviaDatabase {
 		return result;
 	}
 	
+	// getType executes a query using SQLite to select the type column with the same id as the one passed it. it returns a String of the type.
 	public String getType(int id) throws SQLException{
 		stmt = c.createStatement();
 		String result = "";
@@ -86,7 +99,9 @@ public class TriviaDatabase {
 		return result;
 	}
 	
-	public void addTableItem(String question, String answer, ArrayList<String> options, String type) throws SQLException{
+	// addTableItem inserts the question, answer, options, and type into the database.
+	public void addTableItem(String question, String answer, ArrayList<String> options, String type) throws SQLException {
+		
 		stmt = c.createStatement();
 		
 		String option = "";
@@ -112,7 +127,9 @@ public class TriviaDatabase {
 		
 	}
 	
+	// getIDCount executes a query using SQLite to select the type column with the same id as the one passed it. it returns a String of the type.
 	public int getIDCount() throws SQLException {
+		
 		int result = 0;
 		stmt = c.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT COUNT(ID) FROM "+currentTable+";");
@@ -123,10 +140,13 @@ public class TriviaDatabase {
         
 	}
 	
+	//getIDCountTD executes a query using SQLite to select the IDCount from the TriviaMazeQuestions table specifically. It returns an Int of the IDCount.
 	private int getIDCountTD() throws SQLException {
+		
 		int result = 0;
 		stmt = c.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT COUNT(ID) FROM TriviaMazeQuestions;");
+		
 		while(rs.next()) {
 			result = rs.getInt("COUNT(ID)");
 		}

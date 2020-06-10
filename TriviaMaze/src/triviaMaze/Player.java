@@ -1,3 +1,7 @@
+/*  Authors: Victor, Kayla, Caleb 
+ *  CSCD 350 
+*/
+
 package triviaMaze;
 
 import java.io.Serializable;

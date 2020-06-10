@@ -1,17 +1,13 @@
-/*  Authors: Victor, Kayla, Caleb 
- *  CSCD 350 
- *  Cheat Documentation:
+/* Cheat Documentation:
  *  To enable cheats, enter "admin" as your name when prompted. When this is activated,
  *  the maze will only ask one true/false question. To move through type true, and to fail chose false. 
  *  Admin mode also does not reduce health when failing to answer a question correctly. This will be used for 
  *  testing the maze and it's features as well as testing the algorithm to check if there is a path open to the exit.
  *  if there is no path to the exit, then the game will end.
- *  
- *  The TriviaMaze class is designed to interface with the user and the other classes by getting input that is then used to run the game.
+ * 
 */
 
-
-package TriviaMazeDevelopment;
+package triviaMaze;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -43,9 +39,6 @@ public class TriviaMaze {
 	private static Maze triviaMaze;
 	private static TriviaDatabase db;
 	
-	/* gameInitialize() is used to set class variables as well as initializing a player, maze, and a TriviaDatabase. If the user has typed their name as admin, then admin mode is enabled.
-	 * This means that the database table is switched to the admin table and admin mode is set to true.
-	 */
 	private static void gameInitialize() throws SQLException {
 		pf = new PlayerFactory();
 		mf = new MazeFactory();
@@ -67,9 +60,6 @@ public class TriviaMaze {
 		
 	}
 	
-	/* shuffle() grabs the databases IDCount, which is the number of fields it contains, then runs through the loop adding 1 through IDCount to our questions ArrayList. 
-	 * Afterwards we shuffle the ArrayList to ensure a random order for the questions to be pulled out of the database. 
-	 */
 	private static void shuffle() throws SQLException {
 
 		int count = db.getIDCount();
@@ -80,7 +70,6 @@ public class TriviaMaze {
 		questionNum = 1;
 	}
 
-	//initializes the game, and calls the menu class.
 	public static void main(String[] args) throws SQLException {
 		sc = new Scanner(System.in);
 		gameInitialize();
@@ -88,12 +77,6 @@ public class TriviaMaze {
 		sc.close();
 	}
 	
-	/* menu() is what keeps the game running. It introduces you to the triviaMaze and keeps you playing while all the doors are not locked around you,
-	 * you have not run out of lives, and there is still a path to the exit. While that is happening it keeps track of the players position 
-	 * and prints out the maze as well as the players information. It calls the getPlayerOption and menuDirection for on screen information as well as grabbing user input.
-	 * If the player position is at the exit (4, 4) then the game will end as a win and the user will be asked if they want to play again. 
-	 * If one of the loop requirements is not full filled then the game will end and the user is asked to play again. If the user said yes, the game is re-initialize.
-	 */
 	private static void menu() throws SQLException {
 		
 		Room[][] maze = triviaMaze.getMaze();
@@ -101,11 +84,10 @@ public class TriviaMaze {
 		String playAgain;
 		int x = 1;
 		int y = 1;
-		boolean path = true;
-		
 		System.out.println("\n***********************************************************************************************");
 		System.out.println("\nWelcome to the Trivia Maze!\n\nYou need to escape the maze by reaching the exit.\nEach door you try to pass will ask you a trivia question, answer correctly and you may pass.\nMiss two questions and you will lose.");
 		System.out.println("\n***********************************************************************************************\n");
+		boolean path = true;
 		
 		while(!(maze[x][y].allDoorsLocked()) && player.getLives() > 0 && path) {
 			
@@ -161,8 +143,6 @@ public class TriviaMaze {
 		}
 	}
 	
-	/* getPlayerOption takes in the room coordinates and prints out options based on what options are available. if there is a wall to the right then it will not print out the option to go right.
-	*/
 	private static String getPlayerOption(Room room) {
 		int[] position = room.getCoordinates();
 		String option;
@@ -184,10 +164,7 @@ public class TriviaMaze {
 		
 		return option;
 	}
-	
-	/* menuDirection takes in the player option along with the coordinates and room. It checks what the user typed in and if the option is valid. If so then askQuestion() will be called, 
-	 * if the user answers the question right then the position will be updated and the players coordinates will be set. If the user typed options then the options menu will be called.
-	*/
+
 	private static int[] menuDirection(Room room, int x, int y, Player player, String option) throws SQLException {
 		
 		int optionReturn = 0;
@@ -219,7 +196,6 @@ public class TriviaMaze {
 						player.subtractLife();
 				}
 			}
-			
 			else if((option.equalsIgnoreCase("right") || option.equalsIgnoreCase("east")) && position[1] < 4 && room.getWalls()[1] == 0) {
 				
 				optionReturn = 2;
@@ -236,7 +212,6 @@ public class TriviaMaze {
 						player.subtractLife();
 				}
 			}
-			
 			else if((option.equalsIgnoreCase("down") || option.equalsIgnoreCase("south")) && position[0] < 4 && room.getWalls()[2] == 0) {
 				
 				optionReturn = 3;
@@ -253,7 +228,6 @@ public class TriviaMaze {
 						player.subtractLife();
 				}
 			}
-			
 			else if((option.equalsIgnoreCase("left") || option.equalsIgnoreCase("west")) && position[1] > 1 && room.getWalls()[3] == 0) {
 				
 				optionReturn = 4;
@@ -283,8 +257,6 @@ public class TriviaMaze {
 		return results; // results[0] is going to be x coordinates, results[1] is going to be y coordinate;
 	}
 	
-	/* getName() prompts the user for name, and requires the input to be less than 20 characters. if the user types "admin" then a special prompt will be delivered. 
-	 */
 	private static String getName() {
 		
 		System.out.print("Please Enter your name: ");
@@ -301,8 +273,6 @@ public class TriviaMaze {
 		return name;
 	}
 	
-	/* printMaze() uses a loop from 1 to 5 which is based on the size of the maze. It grabs an ArrayList for each row of the maze and then prints out each row for the amount of rows the maze has. 
-	*/
 	private static void printMaze() {
 		
 		
@@ -335,8 +305,6 @@ public class TriviaMaze {
 		}
 	}
 	
-	/* optionsMenu() prints out each option and takes in the users input. If the user is adding a question and admin mode is turned off, it will shuffle the questions arrayList and reinitialize it. 
-	*/
 	private static void optionsMenu() throws SQLException {
 		
 		System.out.println("Press 1. to save game\nPress 2. to load game\nPress 3. add your own question\nPress 4. to quit");
@@ -372,8 +340,6 @@ public class TriviaMaze {
 		}
 	}
 	
-	/* Used to save game by calling the MazeOriginator() class and saves the file to a file named "saveFile.ser". Handles exception for FileNotFound and IOException.
-	 */
 	private static void saveGame(Maze triviaMaze) {
 		
 		MazeOriginator originator = new MazeOriginator();
@@ -398,9 +364,7 @@ public class TriviaMaze {
 		}
 	}
 	
-	/* Used to load game by calling the MazeOriginator() class and loads the file named "saveFile.ser", if the file is not found then it handles exceptions.
-	 */
-	private static MazeOriginator loadGame() {
+	public static MazeOriginator loadGame() {
 		
 		String fileName = "saveFile.ser";
 		MazeOriginator savedGame = new MazeOriginator();
@@ -428,10 +392,6 @@ public class TriviaMaze {
 		return savedGame;
 	}
 	
-	/*  askQuestion() checks for admin mode, if it enabled then it will take in questions and answers from the questionNum field. 
-	 * If not in admin mode, the database will take question and answers from the question Index. This is to prevent the admin table from getting Null objects. 
-	 * Next the method prints out the questions and options based on the type of question. If the user answers the question correctly then it returns true, else false.
-	 */
 	private static boolean askQuestion() throws SQLException {
 		
 		int questionIndex = questions.get(questionNum - 1);
@@ -501,9 +461,6 @@ public class TriviaMaze {
 		
 	}
 
-	/* addTableItem() prompts the user and takes the user input. Based on what input it is, the question type will be established and then the options will be asked for by the user. 
-	 * At the end the user will be prompted to add the question to the database.
-	 */
 	private static void addTableItem() throws SQLException {
 		
 		Scanner sc = new Scanner(System.in);
