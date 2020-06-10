@@ -7,7 +7,11 @@ import org.junit.jupiter.api.Test;
 
 import triviaMaze.Player;
 
+/*Authors: Kayla Rubin, Victor Vargas, Caleb Stanley
+Description: This class tests behaviors of player object class */
+
 class PlayerTest {
+	
 	private Player player;
 	
 	@BeforeEach
@@ -15,6 +19,7 @@ class PlayerTest {
 		player = new Player(1,1,null);
 	}
 
+	//Test ability to set coordinates for player
 	@Test
 	void setCoordinates() {
 		player.setCoordinates(3, 4);
@@ -24,6 +29,7 @@ class PlayerTest {
 		
 	}
 	
+	//Test ability to subtract lives for player
 	@Test
 	void subtractLives() {
 		int lives;

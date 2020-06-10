@@ -6,6 +6,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+/*Authors: Kayla Rubin, Victor Vargas, Caleb Stanley
+Description: This test class checks mazeFactories ability to create a valid maze and return it */
+
 class MazeFactoryTest {
 
 	@Test
